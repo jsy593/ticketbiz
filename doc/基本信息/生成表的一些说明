@@ -1,0 +1,21 @@
+1、接入系统时，生成表结构，sql文件为baseSql.xml，每一次修改数据库字段，都要同步修改sql文件。
+2、注意接入系统的项目名字不能重复，否则表重复，不能生成表，生成新的表名见下面例子。
+3、自动生成的表：
+t_knowledge,
+t_ticket,
+t_reply, 
+t_ticket_move
+
+
+
+
+项目名称：fanaer
+表名例子：t_department   新表名 t_fanaer_department
+
+以下几个表根据 systemId 字段 来区分属于哪个系统
+t_question_type_user_map,
+t_quetion_type,
+t_department,
+t_user
+
+				

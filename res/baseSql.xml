@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="t_knowledge">
+create table t_knowledge(   uuid                 varchar(32) not null,
+   userId               varchar(32) comment '提交人Id',
+   question             varchar(32) comment '问题',
+   answer               varchar(1024) comment '回答',
+   attatmentUrl         varchar(32) comment '附件路径',
+   attatmentName        varchar(32) comment '附件名称',
+   questionTypeId       varchar(32) comment '问题分类Id',
+   createTime           datetime,
+   status               int(1) comment '状态（1正常，2待审核，3失效, 4删除）',
+   primary key (uuid)
+);
+
+</entry>
+
+<entry key="t_ticket">
+create table t_ticket
+(
+   uuid                 varchar(32) not null,
+   question             varchar(64) comment '问题',
+   content              varchar(1024) comment '问题描述',
+   level                int(1) comment '紧急程度',
+   outerUserId          varchar(32) comment '客户Id',
+   attamentName         varchar(32) comment '附件名称',
+   attamentUrl          varchar(32) comment '附件路径',
+   status               int(1) comment '状态（0 等待处理，1正在处理，2等待用户反馈，3问题关闭,4已删除）',
+   questionTypeId       varchar(32) comment '问题分类Id',
+   ownerId              varchar(32) comment '问题持有人Id',
+   createTime           datetime,
+   reason               varchar(512) comment '紧急原因',
+   closeTime            datetime comment '工单关闭时间',
+   email              varchar(32) comment '邮箱',
+   phone              varchar(32) comment '手机号',
+   primary key (uuid)
+);
+
+</entry>
+
+<entry key="t_reply">
+create table t_reply
+(
+   uuid                 varchar(32) not null,
+   ticketId             varchar(32) comment '问题Id',
+   userId               varchar(32) comment '回复人员Id',
+   attachmentUrl        varchar(32) comment '附件路径',
+   attachmentName       varchar(32) comment '附件名称',
+   replyContent         varchar(1024) comment '回复内容',
+   status               int(1) comment '0工单处理回复 1客户回复',
+   createTime           datetime,
+   primary key (uuid)
+);
+
+</entry>
+<entry key="t_ticket_move">
+create table t_ticket_move
+(
+   uuid                 varchar(32) not null,
+   toUserId        		varchar(32) comment '流转目的人ID',
+   fromUserId           varchar(32) comment '申请流转人ID',
+   audtId				varchar(32) comment '审核人Id',
+   ticketId             varchar(32) comment '问题Id',
+   createTime           datetime,
+   reason               varchar(512) comment '流转原因',
+   status               int(1) comment '0待审核 1 通过 2驳回 3已删除',
+   refuseReason         varchar(512) comment '驳回原因',
+   primary key (uuid)
+);
+
+</entry>
+</properties>

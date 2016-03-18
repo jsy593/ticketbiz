@@ -1,0 +1,61 @@
+企业通用CMS,作为公司独立项目存在,便于以后类似项目,可以进行快速开发.
+
+项目使用spring springmvc 通用数据层 mybatis进行开发, 每级间进行spring DI管理.
+1.控制层
+  所有控制层继承BaseController, 其中提供request,response,ajax写入流等基础应用.
+2.数据层
+  通用数据层,基于spring jdbc进行深层封闭,直接调用ICommonDao, 注入commonDao即可使用; 使用方法详见每个方法上的使用说明
+  mybatis为自生成生成代码,所有代码由com.jsy.util.dbhelper.MySQLForMybatis3Plugin生成,如果xml或实体差什么方法,需要重新更改此类方法
+  *如果数据库有字段变更,需要重新生成相关表,相关表之前的类需要手动删除,自动覆盖有问题
+  *使用联合查询,请使用通用数据层
+3.模板
+  freemarker模板分为普通使用页面模板(位于/views/theme), 及通用模板(位于/views/template). 制作模板时,优先考虑通用性;目前没有形成封装框架,手动进行操作
+4.
+  
+  使用规范:
+  1.去除所有小黄线
+  2.所有代码按规范使用
+  3.控制层路径,方法上使用全路径
+  4.注入使用spring标准注入格式
+  5.多使用工具类的方法,重复方法做一个备注,抽出时间进行通用性方法抽取
+  6.代码一个模块或一个大功能提交一次, 每天写的代码必须提交(未有错的情况下).
+  7.修改别人的代码做好注释
+  
+
+JAVA目录说明
+com.jsy
+business 业务类,业务分包存放
+controller 控制层业务分包存放
+dao 所有数据库底层,分包存放不同底层
+develop 本项目的核心包, 贴合于项目通用业务
+util 可以在任何系统中使用的工具包
+ --common 通用工具类
+ --dbhelper 数据库相关的工具类
+ --sys项目系统通用的相关项,如无web.xml启动,启动信息等
+
+jsy配置说明
+com.jsy.dao.mybatis.mapper mybatis自动生成的XML文件
+config 分包配置文件
+ --cache缓存配置,多个缓存分包
+ --db 数据库配置文件存放
+   -- mybatis 数据文件存放
+ --spring spring及MVC等配置文件存放
+base.properties 工程基础属性值
+log4j.properties 日志配置文件
+
+doc目录说明
+基本信息 项目基本情况说明
+数据库 数据库的文档
+需要其它目录时添加并存放
+
+HTML页面说明 所有存放在WEB-INF下, 需要如索引文件这些也将建包存放
+err 全局错误页面提示页
+res 全局静态文件存放
+ --common 通用的JS,CSS,或其它页面
+ --views存放目录与全局页面一致,用以存放页面JS或CSS
+views 全局页面存放,含浏览器,模板页面
+ --template 通用模板页
+ --theme 主题
+
+
+

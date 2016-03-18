@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx.xsd">
+    <!-- 注解扫描 -->
+	<context:annotation-config />
+	<!-- 配置扫描包路径选项 -->
+	<context:component-scan base-package="com.jsy.controller,com.jsy.business,com.jsy.dao" />
+	
+	<!-- spring 启动时加载的Bean信息, 注释即可 -->
+	<bean class="com.jsy.util.sys.init.spring.claz.InstantiationTracingBeanPostProcessor" />
+	
+	
+	
+	<!-- 加载配置文件 -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" id="properties">
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+		<property name="ignoreResourceNotFound" value="false" />
+		<property name="locations">
+			<list>
+				<value>classpath:base.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 数据源配置 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="${driverClassName}"></property>
+		<property name="url" value="${url}"></property>
+		<property name="username" value="${name}"></property>
+		<property name="password" value="${psd}"></property>
+		<property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}"></property>
+		<property name="minIdle" value="${minIdle}"></property>
+		<property name="maxIdle" value="${maxIdle}"></property>
+		<property name="initialSize" value="${initialSize}"></property>
+		<property name="testOnBorrow" value="true"></property>
+		<property name="testWhileIdle" value="true"></property>
+		<property name="testOnReturn" value="true"></property>
+	</bean>
+	
+	<!-- common数据层配置,springjdbc注入配置 -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<!-- 通用DAO注入 -->
+	<bean id="commonDao" class="com.jsy.dao.common.impl.CommonDaoImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+	</bean>
+
+
+	<!-- 定义数据源事件 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<!-- 事务控制   -->  
+	<tx:annotation-driven transaction-manager="txManager" />
+	
+	<!-- 定义事务传播属性 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="select*" propagation="NOT_SUPPORTED" read-only="true" />
+			<tx:method name="insert*" propagation="REQUIRED" rollback-for="Exception,RuntimeException" />
+			<tx:method name="update*" propagation="REQUIRED" rollback-for="Exception,RuntimeException" />
+			<tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception,RuntimeException" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- 其它文件导入 -->
+	<import resource="classpath:config/spring/applicationContext-quartz.xml" />
+</beans>
