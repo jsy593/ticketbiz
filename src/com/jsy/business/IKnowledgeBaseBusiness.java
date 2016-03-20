@@ -22,7 +22,7 @@ public interface IKnowledgeBaseBusiness {
 	Map<String, Object> addKnowledgeBase(Map<String, Object> dataMap);
 
 	/**
-	 * 易川 查询知识库 分页
+	 * jsy 查询知识库 分页
 	 * 
 	 * @param dataMap
 	 * @return
@@ -30,7 +30,7 @@ public interface IKnowledgeBaseBusiness {
 	Map<String, Object> getKnowledgeBaseList(Map<String, Object> dataMap);
 
 	/**
-	 * 易川 查询知识库 单条
+	 * jsy 查询知识库 单条
 	 * 
 	 * @param dataMap
 	 * @return
@@ -38,7 +38,7 @@ public interface IKnowledgeBaseBusiness {
 	Map<String, Object> getKnowledgeBaseOne(Map<String, Object> dataMap);
 
 	/**
-	 * 易川 修改知识库
+	 * jsy 修改知识库
 	 * 
 	 * @param dataMap
 	 * @return

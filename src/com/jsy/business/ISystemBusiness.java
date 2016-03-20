@@ -65,7 +65,7 @@ public interface ISystemBusiness {
 	Map<String, Object> selectSystemIndex(Map<String, Object> sysMap);
 
 	/**
-	 * yc 修改系统状态
+	 *  修改系统状态
 	 * 
 	 * @param dataMap
 	 * @return

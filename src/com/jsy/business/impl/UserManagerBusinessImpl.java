@@ -572,12 +572,12 @@ public class UserManagerBusinessImpl extends BaseBusiness implements IUserManage
 							if ("1".equals(resultStatus)) {
 								// 发送审核成功邮件
 								MailUtil.send(SendMail.SMTP, SendMail.FROM, email, SendMail.TITLE,
-										"<h1>百居易电子商务有限公司,</h1><font>您的账号已审核成功，请点击登录链接。</font><a href='http://http://localhost:8080/jsyticketview/'>登录</a>",
+										"<h1>某某某公司,</h1><font>您的账号已审核成功，请点击登录链接。</font><a href='http://http://localhost:8080/ticketview/'>登录</a>",
 										SendMail.USERNAME, SendMail.PASSWORD);
 							} else if ("2".equals(resultStatus)) {
 								// 发送审核失败邮件
 								MailUtil.send(SendMail.SMTP, SendMail.FROM, email, SendMail.TITLE,
-										"<h1>百居易电子商务有限公司,</h1><font>对不起您的账号审核失败了，请点击链接重新注册。</font><a href='http://http://localhost:8080/jsyticketview/toRegist'>注册</a>",
+										"<h1>某某某公司,</h1><font>对不起您的账号审核失败了，请点击链接重新注册。</font><a href='http://http://localhost:8080/ticketview/toRegist'>注册</a>",
 										SendMail.USERNAME, SendMail.PASSWORD);
 							}
 						}

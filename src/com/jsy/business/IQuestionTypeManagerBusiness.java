@@ -21,7 +21,7 @@ public interface IQuestionTypeManagerBusiness {
 	Map<String, Object> selectQueTypeByDept(Map<String, Object> dataMap);
 
 	/**
-	 * yichuan 获取问题分类 list
+	 * jsy 获取问题分类 list
 	 * 
 	 * @param dataMap
 	 * @return
@@ -29,7 +29,7 @@ public interface IQuestionTypeManagerBusiness {
 	Map<String, Object> getQuestionTypeList(Map<String, Object> dataMap);
 
 	/**
-	 * 易川 添加问题分类
+	 * jsy 添加问题分类
 	 * 
 	 * @param dataMap
 	 * @return
@@ -45,7 +45,7 @@ public interface IQuestionTypeManagerBusiness {
 	Map<String, Object> updateQuestionType(Map<String, Object> dataMap);
 
 	/**
-	 * yichuan 获取问题分类 单条
+	 * jsy 获取问题分类 单条
 	 * 
 	 * @param dataMap
 	 * @return

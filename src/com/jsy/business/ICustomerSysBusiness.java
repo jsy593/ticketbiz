@@ -6,14 +6,14 @@ import org.springframework.stereotype.Service;
 
 /**
  * 
- * @author yichuan
+ * @author jsy
  *
  */
 @Service
 public interface ICustomerSysBusiness {
 
 	/**
-	 * 易川
+	 * jsy
 	 * 
 	 * 获取用户自己提交的工单 分页
 	 * 
@@ -23,7 +23,7 @@ public interface ICustomerSysBusiness {
 	Map<String, Object> getCustomerTicketList(Map<String, Object> dataMap);
 
 	/**
-	 * 易川 客户系统关闭工单
+	 * jsy 客户系统关闭工单
 	 * 
 	 * @param dataMap
 	 * @return
@@ -31,7 +31,7 @@ public interface ICustomerSysBusiness {
 	Map<String, Object> closeTicket(Map<String, Object> dataMap);
 
 	/**
-	 * 易川 客户系统添加工单
+	 * jsy 客户系统添加工单
 	 * 
 	 * @param dataMap
 	 * @return
@@ -39,7 +39,7 @@ public interface ICustomerSysBusiness {
 	Map<String, Object> addTicket(Map<String, Object> dataMap);
 
 	/**
-	 * 易川 客户系统工单分页查询
+	 * jsy 客户系统工单分页查询
 	 * 
 	 * @param dataMap
 	 * @return
