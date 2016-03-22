@@ -13,7 +13,7 @@
 	<context:component-scan base-package="com.jsy.controller,com.jsy.business,com.jsy.dao" />
 	
 	<!-- spring 启动时加载的Bean信息, 注释即可 -->
-	<bean class="com.jsy.util.sys.init.spring.claz.InstantiationTracingBeanPostProcessor" />
+<!-- 	<bean class="com.jsy.util.sys.init.spring.claz.InstantiationTracingBeanPostProcessor" /> -->
 	
 	
 	
