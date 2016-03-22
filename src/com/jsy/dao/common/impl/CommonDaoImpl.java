@@ -968,12 +968,16 @@ public class CommonDaoImpl implements ICommonDao {
 			if (sql.indexOf("order") >= 0) {
 				sql = sql.substring(0, sql.indexOf("order")); // 总条数查询SQL处理
 			}
-			
-			countSql.append("( " + sql + ") obj");
-			log.info("====>> 查询数据总条数SQL语句: " + countSql);
 			if (CommonUtil.isEmpty(params)) {
 				params = new ArrayList<Object>();
 			}
+			if(sql.indexOf("limit") >= 0){
+				sql = sql.substring(0,sql.indexOf("limit"));
+				params.remove(params.size()-1);
+				params.remove(params.size()-1);
+			}
+			countSql.append("( " + sql + ") obj");
+			log.info("====>> 查询数据总条数SQL语句: " + countSql);
 			queryForList = jdbcTemplate.queryForList(countSql.toString(),
 					params.toArray());
 			log.info("====>> 数据总条数: "
