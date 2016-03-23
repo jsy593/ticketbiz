@@ -12,6 +12,7 @@ import com.jsy.business.ISystem;
 import com.jsy.business.ISystemBusiness;
 import com.jsy.business.base.AccessSystemBusinessImpl;
 import com.jsy.business.base.UserBusinessImpl;
+import com.jsy.business.base.UserRoleBusinessImpl;
 import com.jsy.util.common.CommonUtil;
 import com.jsy.util.common.MailUtil;
 import com.jsy.util.common.SendMail;
@@ -27,7 +28,9 @@ public class SystemBusinessImpl extends BaseBusiness implements ISystemBusiness 
 	private ISystem systemImpl;
 	@Autowired
 	private UserBusinessImpl userBusinessImpl;
-
+	
+	@Autowired
+	private UserRoleBusinessImpl userRoleBusinessImpl;
 	/**
 	 * 添加系统
 	 * @author jsy
@@ -66,11 +69,24 @@ public class SystemBusinessImpl extends BaseBusiness implements ISystemBusiness 
  * @param sysMap
  * @return
  */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> selectSystem(Map<String, Object> sysMap) {
-
+		Map<String,Object> userMap = new HashMap<String,Object>();
+		Map<String,Object> roleMap = new HashMap<String,Object>();
 		Map<String, Object> reMap = new HashMap<String, Object>();
 		try {
+			if(sysMap.get("userId")!= null){
+				userMap.put("uuid", sysMap.get("userId"));
+				Map<String, Object> uMap = userBusinessImpl.selectOne(userMap);
+				roleMap.put("code", "superAdmin");
+				Map<String, Object> rMap = userRoleBusinessImpl.selectOne(roleMap);
+				Map<String, Object> tuserMap =  (Map<String, Object>) uMap.get("data");
+				Map<String, Object> troleMap =  (Map<String, Object>) rMap.get("data");
+				if(tuserMap.get("roleId") != troleMap.get("uuid")){
+					sysMap.put("status", "!=4");
+				}
+			}
 			reMap = systemBusinessImpl.selectList(sysMap);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -133,14 +149,14 @@ public class SystemBusinessImpl extends BaseBusiness implements ISystemBusiness 
 								if(!CommonUtil.isEmpty(email)){
 									//发送审核成功邮件
 									MailUtil.send(SendMail.SMTP,SendMail.FROM,email,SendMail.TITLE,
-										"<h1>百居易电子商务有限公司,</h1><font>您申请接入的系统已审核成功，您的appId:"+appId+",appKey:"+appKey+"。请点击链接登录。</font><a href='http://http://localhost:8080/jsyticketview/'>登录</a>",SendMail.USERNAME,SendMail.PASSWORD);
+										"<h1>某某某公司,</h1><font>您申请接入的系统已审核成功，您的appId:"+appId+",appKey:"+appKey+"。请点击链接登录。</font><a href='http://http://localhost:8080/ticketview/'>登录</a>",SendMail.USERNAME,SendMail.PASSWORD);
 								}
 							}else if("3".equals(status)){
 								reMap = systemBusinessImpl.update(sysMap);
 								if(!CommonUtil.isEmpty(email)){
 									//发送审核失败邮件
 									MailUtil.send(SendMail.SMTP,SendMail.FROM,email,SendMail.TITLE,
-										"<h1>百居易电子商务有限公司,</h1><font>您申请接入的系统审核失败，请点击登录链接重新申请。</font><a href='http://http://localhost:8080/jsyticketview/'>登录</a>",SendMail.USERNAME,SendMail.PASSWORD);
+										"<h1>某某某公司,</h1><font>您申请接入的系统审核失败，请点击登录链接重新申请。</font><a href='http://http://localhost:8080/ticketview/'>登录</a>",SendMail.USERNAME,SendMail.PASSWORD);
 								}
 							}
 						}

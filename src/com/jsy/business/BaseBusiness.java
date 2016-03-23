@@ -238,10 +238,16 @@ public class BaseBusiness {
 					count++;
 					if (likeList.contains(key)) {
 						sql.append(" and ").append(key).append(" like ").append(" '%' ? '%' ");
+						paramsList.add(value);
 					} else {
-						sql.append(" and ").append(key).append(" = ").append(" ? ");
+						if(value.toString().trim().startsWith("!=")){
+							sql.append(" and ").append(key).append(value);
+						}else{
+							sql.append(" and ").append(key).append(" = ").append(" ? ");
+							paramsList.add(value);
+						}
 					}
-					paramsList.add(value);
+					
 				}
 			}
 
