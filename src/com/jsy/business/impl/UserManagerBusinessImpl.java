@@ -880,25 +880,7 @@ public class UserManagerBusinessImpl extends BaseBusiness implements IUserManage
 
 		return reMap;
 	}
-
-	/*
-	 * @Override public List<Map<String, Object>> selectUserBydept(Map<String,
-	 * Object> dataMap) { List<Map<String, Object>> reMap = new
-	 * ArrayList<Map<String, Object>>(); StringBuffer deptSql = new
-	 * StringBuffer("select * from" + DEPARTMENT); StringBuffer userSql = new
-	 * StringBuffer("select * from" + USER); Map<String, Object> deptMap = new
-	 * HashMap<String, Object>(); List<Object> deptParams = new
-	 * ArrayList<Object>(); List<Object> UserParams = new ArrayList<Object>();
-	 * try { //查询部门表,得到部门的uuid handleSql(dataMap, deptSql, deptParams, null);
-	 * deptMap= commonDao.selectForMap(deptSql.toString(),
-	 * deptParams.toArray()); Object departmentId = deptMap.get("uuid");
-	 * deptMap.clear(); deptMap.put("departmentId", departmentId);
-	 * //根据departmentId查询user表 handleSql(deptMap, userSql, UserParams, null);
-	 * reMap= commonDao.selectList(userSql.toString(), UserParams); } catch
-	 * (Exception e) { e.printStackTrace(); }
-	 * 
-	 * return reMap; }
-	 */
+	
 	@Override
 	public Map<String, Object> selectUserBydept(Map<String, Object> dataMap) {
 		Map<String, Object> reMap = new HashMap<String, Object>();
@@ -941,17 +923,73 @@ public class UserManagerBusinessImpl extends BaseBusiness implements IUserManage
 		return resultMap;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> selectDept(Map<String, Object> dataMap) {
 		dataMap.put("orderBy", "createTime desc");
 		StringBuffer sql = new StringBuffer(" select * from " + DEPARTMENT);
-
+		
 		Map<String, Object> reMap = new HashMap<String, Object>();
+		List<Map<String,Object>> listMap = new ArrayList<Map<String,Object>>();
 		List<Object> params = new ArrayList<Object>();
 
 		try {
-			handleSql(dataMap, sql, params, null);
-
+			
+			if(!dataMap.containsKey("systemIndex")){//如果没有选择系统，则 查询该公司的所有的系统
+				dataMap.put("systemIndex", "!=0");
+				Map<String, Object> sysMap = accessSystemBusinessImpl.selectList(dataMap);//dataMap应该包含管理员的id
+				if(sysMap.get("list") != null && !sysMap.get("list").equals("")){//如果有系统
+					List<Map<String, Object>> sysList = (List<Map<String, Object>>) sysMap.get("list");
+					List<Object> tempParams = new ArrayList<Object>();
+					dataMap.remove("userId");
+					for(Map<String, Object> tmap :sysList){//循环该管理员下面的所有系统，获取每个系统下面的部门信息
+						if(tmap.get("systemIndex") != null){
+							dataMap.put("systemIndex", tmap.get("systemIndex"));
+							handleSql(dataMap, sql, tempParams, null);
+							List<Map<String, Object>> List = commonDao.selectList(sql.toString(), tempParams);//该系统下的所有部门信息
+							if (List != null && List.size() > 0) {
+								for (Map<String, Object> map : List) {
+									Map<String, Object> newMap = new HashMap<String, Object>();
+									newMap.put("departmentId", map.get("uuid"));
+									Map<String, Object> selectDeptAdmin = selectDeptAdmin(newMap);
+									if ("1".equals(selectDeptAdmin.get("state").toString())) {
+										Map<String, Object> object = (Map<String, Object>) selectDeptAdmin.get("data");
+										map.put("adminUser", object.get("realName"));
+									}
+									listMap.add(map);//把每次循环的系统下的所有部门信息添加到listMap
+								}
+							} 
+							reMap.put("totalCount", commonDao.selectTotalCount(sql.toString(), tempParams));
+							reMap.put("systemIndex", tmap.get("systemIndex"));//第一个系统的值返回，使下拉框选中
+							reMap.put("list", listMap);//把所有的系统的部门信息放入map集合
+							break;//取第一个系统
+						}
+					}
+					reMap.put(KEY_STATE, STATE_ONE);
+					reMap.put("systemList", sysList);//返回所有的系统信息，赋给下拉框
+				}else{
+					reMap.put(KEY_STATE, STATE_FIFTEEN);
+					return reMap;
+				}
+				return reMap;
+			}
+			
+			//查询下拉框的系统 的信息
+			Map<String, Object> tmap  = new HashMap<String, Object>();
+			tmap.put("userId", dataMap.get("userId"));
+			dataMap.remove("userId");
+			tmap.put("systemIndex", "!=0");
+			Map<String, Object> sysMap = accessSystemBusinessImpl.selectList(tmap);//根据管理员id查询系统
+			if(sysMap.get("list") != null && !sysMap.get("list").equals("")){//如果有系统
+				List<Map<String, Object>> sysList = (List<Map<String, Object>>) sysMap.get("list");
+				reMap.put("systemList", sysList);
+			}
+			//查询系统下面的部门的信息
+			if(dataMap.get("content") != null && !dataMap.get("content").equals("")){
+				dataMap.put("name", dataMap.get("content"));
+			}
+			dataMap.remove("content");
+			handleSql(dataMap, sql, params, "name");
 			List<Map<String, Object>> List = commonDao.selectList(sql.toString(), params);
 			if (List != null && List.size() > 0) {
 				for (Map<String, Object> map : List) {
@@ -962,18 +1000,13 @@ public class UserManagerBusinessImpl extends BaseBusiness implements IUserManage
 						Map<String, Object> object = (Map<String, Object>) selectDeptAdmin.get("data");
 						map.put("adminUser", object.get("realName"));
 					}
-					// Map<String, Object> userMap = (Map<String, Object>)
-					// selectDeptAdmin
-					// .get("data");
-					// if (!CommonUtil.isEmpty(userMap)) {
-					// map.put("adminUser", userMap.get("realName"));
-					// }
 				}
 				reMap.put(KEY_STATE, STATE_ONE);
 				reMap.put("list", List);
 			} else {
 				reMap.put(KEY_STATE, STATE_FIFTEEN);
 			}
+			reMap.put("totalCount", commonDao.selectTotalCount(sql.toString(), params));
 		} catch (Exception e) {
 			reMap.put(KEY_STATE, STATE_ZERO);
 			return reMap;

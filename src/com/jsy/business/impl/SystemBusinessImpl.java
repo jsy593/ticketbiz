@@ -76,7 +76,7 @@ public class SystemBusinessImpl extends BaseBusiness implements ISystemBusiness 
 		Map<String,Object> roleMap = new HashMap<String,Object>();
 		Map<String, Object> reMap = new HashMap<String, Object>();
 		try {
-			if(sysMap.get("userId")!= null){
+			if(sysMap.get("userId")!= null && !sysMap.get("userId").equals("")){//当用户不是超级管理员，将不显示已删除的状态的系统
 				userMap.put("uuid", sysMap.get("userId"));
 				Map<String, Object> uMap = userBusinessImpl.selectOne(userMap);
 				roleMap.put("code", "superAdmin");

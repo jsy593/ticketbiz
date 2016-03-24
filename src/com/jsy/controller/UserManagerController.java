@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.jsy.business.ISystemBusiness;
 import com.jsy.business.IUserManagerBusiness;
 import com.jsy.controller.common.BaseController;
 import com.jsy.util.common.CommonUtil;
@@ -28,7 +29,7 @@ public class UserManagerController extends BaseController {
 
 	@Autowired
 	private IUserManagerBusiness iUserManagerBusiness;
-
+	
 	/**
 	 * @author yichuan
 	 * @param model
@@ -259,9 +260,16 @@ public class UserManagerController extends BaseController {
 	@ResponseBody
 	public Map<String, Object> selectDeptr(@RequestParam Map<String, Object> dataMap) {
 		Map<String, Object> resultMap = iUserManagerBusiness.selectDept(dataMap);
+		System.out.println(resultMap);
+		
 		try {
-			resultMap.put("maxPage", PageUtil.getAllPage(Integer.parseInt(resultMap.get("totalCount").toString()),
-					Integer.parseInt(dataMap.get("pageSize").toString())));
+			if(resultMap.get("totalCount") != null && !resultMap.get("totalCount").equals("")){
+				resultMap.put("maxPage", PageUtil.getAllPage(Integer.parseInt(resultMap.get("totalCount").toString()),
+						Integer.parseInt(dataMap.get("pageSize").toString())));
+			}else{
+				resultMap.put("totalCount", 0);
+				resultMap.put("maxPage", 1);
+			}
 		} catch (Exception e) {
 			resultMap.put("maxPage", 1);
 		}

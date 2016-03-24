@@ -962,6 +962,11 @@ public class CommonDaoImpl implements ICommonDao {
 		List<Map<String, Object>> queryForList = null;
 
 		try {
+			if(sql.indexOf("limit") >= 0){
+				sql = sql.substring(0,sql.indexOf("limit"));
+				params.remove(params.size()-1);
+				params.remove(params.size()-1);
+			}
 			if (sql.indexOf("ORDER") >= 0) {
 				sql = sql.substring(0, sql.indexOf("ORDER")); // 总条数查询SQL处理
 			}
@@ -970,11 +975,6 @@ public class CommonDaoImpl implements ICommonDao {
 			}
 			if (CommonUtil.isEmpty(params)) {
 				params = new ArrayList<Object>();
-			}
-			if(sql.indexOf("limit") >= 0){
-				sql = sql.substring(0,sql.indexOf("limit"));
-				params.remove(params.size()-1);
-				params.remove(params.size()-1);
 			}
 			countSql.append("( " + sql + ") obj");
 			log.info("====>> 查询数据总条数SQL语句: " + countSql);
