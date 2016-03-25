@@ -442,5 +442,5 @@ public class UserManagerController extends BaseController {
 		
 		return resultMap;
 	}
-
+	
 }

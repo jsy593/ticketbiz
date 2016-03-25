@@ -926,6 +926,7 @@ public class UserManagerBusinessImpl extends BaseBusiness implements IUserManage
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> selectDept(Map<String, Object> dataMap) {
+		
 		dataMap.put("orderBy", "createTime desc");
 		StringBuffer sql = new StringBuffer(" select * from " + DEPARTMENT);
 		
@@ -936,7 +937,7 @@ public class UserManagerBusinessImpl extends BaseBusiness implements IUserManage
 		try {
 			
 			if(!dataMap.containsKey("systemIndex")){//如果没有选择系统，则 查询该公司的所有的系统
-				dataMap.put("systemIndex", "!=0");
+				dataMap.put("status", "1");
 				Map<String, Object> sysMap = accessSystemBusinessImpl.selectList(dataMap);//dataMap应该包含管理员的id
 				if(sysMap.get("list") != null && !sysMap.get("list").equals("")){//如果有系统
 					List<Map<String, Object>> sysList = (List<Map<String, Object>>) sysMap.get("list");
@@ -951,6 +952,7 @@ public class UserManagerBusinessImpl extends BaseBusiness implements IUserManage
 								for (Map<String, Object> map : List) {
 									Map<String, Object> newMap = new HashMap<String, Object>();
 									newMap.put("departmentId", map.get("uuid"));
+									newMap.put("status", "!=-1");
 									Map<String, Object> selectDeptAdmin = selectDeptAdmin(newMap);
 									if ("1".equals(selectDeptAdmin.get("state").toString())) {
 										Map<String, Object> object = (Map<String, Object>) selectDeptAdmin.get("data");
@@ -972,6 +974,10 @@ public class UserManagerBusinessImpl extends BaseBusiness implements IUserManage
 					return reMap;
 				}
 				return reMap;
+			}
+			
+			if(dataMap.get("status") == null ){
+				dataMap.put("status", "!=-1");//-1代表删除
 			}
 			
 			//查询下拉框的系统 的信息

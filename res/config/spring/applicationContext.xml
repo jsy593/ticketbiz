@@ -73,5 +73,5 @@
 	</tx:advice>
 	
 	<!-- 其它文件导入 -->
-	<import resource="classpath:config/spring/applicationContext-quartz.xml" />
+<!-- 	<import resource="classpath:config/spring/applicationContext-quartz.xml" /> -->
 </beans>
