@@ -937,12 +937,13 @@ public class UserManagerBusinessImpl extends BaseBusiness implements IUserManage
 		try {
 			
 			if(!dataMap.containsKey("systemIndex")){//如果没有选择系统，则 查询该公司的所有的系统
-				dataMap.put("status", "1");
+				dataMap.put("status", 1);
 				Map<String, Object> sysMap = accessSystemBusinessImpl.selectList(dataMap);//dataMap应该包含管理员的id
 				if(sysMap.get("list") != null && !sysMap.get("list").equals("")){//如果有系统
 					List<Map<String, Object>> sysList = (List<Map<String, Object>>) sysMap.get("list");
 					List<Object> tempParams = new ArrayList<Object>();
 					dataMap.remove("userId");
+					dataMap.put("status", "!=-1");
 					for(Map<String, Object> tmap :sysList){//循环该管理员下面的所有系统，获取每个系统下面的部门信息
 						if(tmap.get("systemIndex") != null){
 							dataMap.put("systemIndex", tmap.get("systemIndex"));
@@ -976,13 +977,12 @@ public class UserManagerBusinessImpl extends BaseBusiness implements IUserManage
 				return reMap;
 			}
 			
-			if(dataMap.get("status") == null ){
-				dataMap.put("status", "!=-1");//-1代表删除
-			}
+			
 			
 			//查询下拉框的系统 的信息
 			Map<String, Object> tmap  = new HashMap<String, Object>();
 			tmap.put("userId", dataMap.get("userId"));
+			tmap.put("status", 1);
 			dataMap.remove("userId");
 			tmap.put("systemIndex", "!=0");
 			Map<String, Object> sysMap = accessSystemBusinessImpl.selectList(tmap);//根据管理员id查询系统
@@ -991,6 +991,9 @@ public class UserManagerBusinessImpl extends BaseBusiness implements IUserManage
 				reMap.put("systemList", sysList);
 			}
 			//查询系统下面的部门的信息
+			if(dataMap.get("status") == null ){
+				dataMap.put("status", "!=-1");//1代表正常
+			}
 			if(dataMap.get("content") != null && !dataMap.get("content").equals("")){
 				dataMap.put("name", dataMap.get("content"));
 			}
