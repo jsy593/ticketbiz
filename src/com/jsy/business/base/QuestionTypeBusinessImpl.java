@@ -90,4 +90,15 @@ public class QuestionTypeBusinessImpl extends BaseBusiness {
 		}
 		return reMap;
 	}
+	
+	public Map<String, Object> delete(Map<String, Object> dataMap) throws Exception {
+		Map<String, Object> reMap = new HashMap<String, Object>();
+		Integer updateOne = commonDao.deleteOne(dataMap, QUESTION_TYPE);
+		if (updateOne == 1) {
+			reMap.put(KEY_STATE, STATE_ONE);
+		} else {
+			reMap.put(KEY_STATE, STATE_FIFTEEN);
+		}
+		return reMap;
+	}
 }

@@ -83,5 +83,11 @@ public interface IQuestionTypeManagerBusiness {
 	 * @return
 	 */
 	Map<String, Object> addQuestionTypeForUser(Map<String, Object> dataMap);
+	/**
+	 * 删除分类
+	 * @param dataMap
+	 * @return
+	 */
+	Map<String, Object> deleteQuestionType(Map<String, Object> dataMap);
 
 }

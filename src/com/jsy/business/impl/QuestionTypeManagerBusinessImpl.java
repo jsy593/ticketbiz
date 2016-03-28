@@ -91,6 +91,8 @@ public class QuestionTypeManagerBusinessImpl extends BaseBusiness implements IQu
 									Map<String, Object> newMap = new HashMap<String, Object>();
 									newMap.put("departmentId", map.get("uuid"));
 									newMap.put("status", "!=-1");
+									newMap.put("pageSize", dataMap.get("pageSize"));
+									newMap.put("pageIndex", dataMap.get("pageIndex"));
 									Map<String, Object> questionTypeMap = questionTypeBusinessImpl.selectList(newMap);
 									if ("1".equals(questionTypeMap.get("state").toString())) {
 										List<Map<String, Object>> questionTypeList = (List<Map<String, Object>>) questionTypeMap.get("list");
@@ -296,6 +298,20 @@ public class QuestionTypeManagerBusinessImpl extends BaseBusiness implements IQu
 			reMap.put(KEY_STATE, STATE_ZERO);
 			return reMap;
 		}
+		return reMap;
+	}
+
+	@Override
+	public Map<String, Object> deleteQuestionType(Map<String, Object> dataMap) {
+		Map<String, Object> reMap = new HashMap<String, Object>();
+		try {
+			reMap = questionTypeBusinessImpl.delete(dataMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+			reMap.put(KEY_STATE, STATE_ZERO);
+			return reMap;
+		}
+
 		return reMap;
 	}
 

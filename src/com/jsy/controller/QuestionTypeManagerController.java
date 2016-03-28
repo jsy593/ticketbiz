@@ -137,5 +137,18 @@ public class QuestionTypeManagerController extends BaseController {
 		String jsonStr = JsonUtil.ObjectToJson(reMap);
 		return jsonStr;
 	}
+	
+	/**
+	 * @author yichuan 修改问题分类对应关系
+	 * @param model
+	 * @return 0 系统错误 1 成功 2 失败
+	 */
+	@RequestMapping(value = "/deleteQuestionType", method = RequestMethod.POST)
+	@ResponseBody
+	public String deleteQuestionType(@RequestParam Map<String, Object> dataMap) {
+		Map<String, Object> reMap = iQuestionTypeManagerBusiness.deleteQuestionType(dataMap);
 
+		String jsonStr = JsonUtil.ObjectToJson(reMap);
+		return jsonStr;
+	}
 }
