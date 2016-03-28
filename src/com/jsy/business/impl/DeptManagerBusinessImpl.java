@@ -105,5 +105,23 @@ public class DeptManagerBusinessImpl extends BaseBusiness implements IDeptManage
 		}
 		return reMap;
 	}
+	
+	@Override
+	public Map<String, Object> selectDept(Map<String, Object> dataMap) {
+		Map<String, Object> reMap = new HashMap<String, Object>();
+		try {
+			reMap = departmentBusinessImpl.selectList(dataMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+			reMap.put(KEY_STATE, STATE_ZERO);
+			return reMap;
+		}
+		if(reMap.get("state").toString().equals("1")){
+			reMap.put(KEY_STATE,STATE_ONE);
+		}else{
+			reMap.put(KEY_STATE,STATE_FIFTEEN);
+		}
+		return reMap;
+	}
 
 }

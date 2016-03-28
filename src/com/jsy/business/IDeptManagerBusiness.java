@@ -35,4 +35,11 @@ public interface IDeptManagerBusiness {
 	 */
 	Map<String, Object> changeDept(Map<String, Object> dataMap);
 	
+	/**
+	 * 查询部门
+	 * @param dataMap
+	 * @return
+	 */
+	Map<String, Object> selectDept(Map<String, Object> dataMap);
+	
 }

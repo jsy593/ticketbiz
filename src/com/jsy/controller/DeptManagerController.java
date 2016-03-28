@@ -58,4 +58,18 @@ public class DeptManagerController {
 		return resultMap;
 	}
 	
+	/**
+	 * 查询部门
+	 * 
+	 * @author jsy
+	 * @param dataMap
+	 * @return 1 成功 2 失败 13 提示管理员部门有对应分类
+	 */
+	@RequestMapping(value = "/selectDeptByMap", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> selectDeptBySystemIndex(@RequestParam Map<String, Object> dataMap) {
+		Map<String, Object> resultMap = iDeptManagerBusiness.selectDept(dataMap);
+		
+		return resultMap;
+	}
 }

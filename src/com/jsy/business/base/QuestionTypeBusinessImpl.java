@@ -44,14 +44,21 @@ public class QuestionTypeBusinessImpl extends BaseBusiness {
 
 		Map<String, Object> reMap = new HashMap<String, Object>();
 		List<Object> params = new ArrayList<Object>();
-
-		handleSql(dataMap, sql, params, null);
+		if(dataMap.get("content")==null || dataMap.get("content").equals("")){
+			dataMap.remove("content");
+			handleSql(dataMap, sql, params, null);
+		}else{
+			dataMap.put("typeName",dataMap.get("content"));
+			dataMap.remove("content");
+			handleSql(dataMap, sql, params, "typeName");
+		}
 
 		List<Map<String, Object>> QUESTION_TYPEList = commonDao.selectList(sql.toString(), params);
 
 		if (QUESTION_TYPEList != null && QUESTION_TYPEList.size() > 0) {
 			reMap.put(KEY_STATE, STATE_ONE);
 			reMap.put("list", QUESTION_TYPEList);
+			reMap.put("totalCount", commonDao.selectTotalCount(sql.toString(), params));
 		} else {
 			reMap.put(KEY_STATE, STATE_FIFTEEN);
 		}
