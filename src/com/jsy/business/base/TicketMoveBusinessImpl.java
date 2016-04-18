@@ -55,6 +55,7 @@ public class TicketMoveBusinessImpl extends BaseBusiness {
 		if (TICKET_MOVEList != null && TICKET_MOVEList.size() > 0) {
 			reMap.put(KEY_STATE, STATE_ONE);
 			reMap.put("list", TICKET_MOVEList);
+			reMap.put("totalCount", commonDao.selectTotalCount(sql.toString(), params));
 		} else {
 			reMap.put(KEY_STATE, STATE_FIFTEEN);
 		}
